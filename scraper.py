@@ -5,7 +5,7 @@ from threading import Thread
 from flask import Flask
 
 # --- INSTITUTIONAL CONFIGURATION ---
-# We pull these directly from Render Environment Variables
+# These are injected by the Render Environment Dashboard
 MAIN_TOKEN = os.getenv("TELEGRAM_TOKEN")
 GUARD_TOKEN = os.getenv("GUARD_TOKEN")
 VAULT = os.getenv("VAULT_WALLET", "8dtuyskTtsB78DFDPWZszarvDpedwftKYCoMdZwjHbxy")
