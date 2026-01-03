@@ -5,10 +5,11 @@ from threading import Thread
 from flask import Flask
 
 # --- INSTITUTIONAL CONFIGURATION ---
-# These are injected by the Render Environment Dashboard
+# Injected via Render Environment Dashboard
 MAIN_TOKEN = os.getenv("TELEGRAM_TOKEN")
 GUARD_TOKEN = os.getenv("GUARD_TOKEN")
 VAULT = os.getenv("VAULT_WALLET", "8dtuyskTtsB78DFDPWZszarvDpedwftKYCoMdZwjHbxy")
+BIRDEYE_KEY = os.getenv("BIRDEYE_API_KEY")
 
 app = Flask(__name__)
 
@@ -21,11 +22,14 @@ def health():
         "nodes": {
             "protector": "ACTIVE" if MAIN_TOKEN else "OFFLINE",
             "guard": "ACTIVE" if GUARD_TOKEN else "OFFLINE"
-        }
+        },
+        "vault": VAULT
     }, 200
 
 def run_health_server():
-    port = int(os.environ.get("PORT", 10000))
+    # Force the port to match your Render setting (3000) or system default
+    port = int(os.environ.get("PORT", 3000))
+    print(f"📡 HEALTH_SERVER: Binding to port {port}")
     app.run(host='0.0.0.0', port=port)
 
 # --- NODE PERSISTENCE ENGINE ---
@@ -42,15 +46,13 @@ def run_bot(token, name, logic_func):
 
     while True:
         try:
-            # Force reset the session to kill ghost connections (409 Fix)
             bot.remove_webhook()
             time.sleep(2)
-
-            print(f"📡 {name} SYNCED: Listening for commands...")
+            print(f"📡 {name} SYNCED: Listening...")
             bot.polling(none_stop=True, interval=3, timeout=60)
         except Exception as e:
             if "Conflict" in str(e) or "409" in str(e):
-                print(f"⚠️ {name} CONFLICT: Ghost instance detected. Cooling down 20s...")
+                print(f"⚠️ {name} CONFLICT: Cooling down 20s...")
                 time.sleep(20)
             else:
                 print(f"⚠️ {name} RECOVERY: {e}")
@@ -84,7 +86,7 @@ def guard_logic(bot):
             "**Portal:** PAYMENT VERIFICATION\n"
             f"**Required Tax:** 1.5 SOL\n"
             f"**Target Vault:** `{VAULT}`\n\n"
-            "Paste TX Hash after sending payment."
+            "Paste TX Hash after sending payment to the Vault."
         )
         bot.reply_to(m, msg, parse_mode='Markdown')
 
