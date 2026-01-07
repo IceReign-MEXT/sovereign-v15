@@ -3,170 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOVEREIGN V15 | COMMANDER MEX ROBERT</title>
+    <title>SOVEREIGN V15 | Terminal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&display=swap');
-        body { font-family: 'JetBrains Mono', monospace; background-color: #020408; color: #00f2ff; overflow-x: hidden; }
-        .heavy-border { border: 2px solid #00f2ff33; position: relative; background: rgba(10, 15, 25, 0.9); }
-        .heavy-border::after { content: ""; position: absolute; bottom: -2px; right: -2px; width: 15px; height: 15px; border-bottom: 3px solid #00f2ff; border-right: 3px solid #00f2ff; }
-        .locked-blur { filter: blur(12px); pointer-events: none; transition: all 1s ease; }
-        .btn-strike { background: linear-gradient(135deg, #0ea5e9, #00f2ff); color: #000; font-weight: 800; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); transition: 0.3s; }
-        .btn-strike:hover { transform: scale(1.05); box-shadow: 0 0 20px #00f2ff88; }
-        .scanline { background: linear-gradient(to bottom, transparent 50%, rgba(0, 242, 255, 0.05) 50%); background-size: 100% 4px; pointer-events: none; position: fixed; inset: 0; z-index: 50; }
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+        body { background-color: #020617; color: #94a3b8; font-family: 'JetBrains Mono', monospace; }
+        .neon-border { border: 1px solid rgba(34, 211, 238, 0.3); box-shadow: 0 0 15px rgba(34, 211, 238, 0.1); }
+        .blur-reveal { filter: blur(6px); transition: all 0.5s ease; }
+        .glow-text { color: #22d3ee; text-shadow: 0 0 10px rgba(34, 211, 238, 0.5); }
     </style>
 </head>
-<body class="p-4 md:p-10 min-h-screen">
-    <div class="scanline"></div>
+<body class="p-4 md:p-10 flex flex-col items-center">
+    <header class="w-full max-w-4xl flex justify-between items-center mb-10">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-cyan-500 rounded flex items-center justify-center">
+                <span class="text-black font-black">V15</span>
+            </div>
+            <h1 class="text-white font-bold tracking-widest uppercase">Sovereign Terminal</h1>
+        </div>
+        <div class="text-[10px] text-green-500 animate-pulse">● NODES_SYNCED</div>
+    </header>
 
-    <div class="max-w-6xl mx-auto space-y-8 relative z-10">
-        <div class="flex justify-between items-end border-b border-cyan-900 pb-6">
-            <div>
-                <h1 class="text-3xl font-black tracking-tighter uppercase italic">Sovereign <span class="text-white">V15</span></h1>
-                <p class="text-[10px] text-cyan-700 tracking-[0.4em]">OPERATOR: MEX_ROBERT // BOT: @MEX_ProtectorBot</p>
-            </div>
-            <div class="text-right hidden md:block">
-                <p class="text-[9px] text-zinc-500">FLEET_VAULT</p>
-                <p class="text-emerald-500 font-bold text-[10px]">8dtu...jHbxy</p>
-            </div>
+    <main class="w-full max-w-4xl">
+        <div class="neon-border bg-slate-900/50 p-6 rounded-lg mb-8">
+            <h2 class="text-cyan-400 mb-2 font-bold uppercase tracking-tighter">Institutional Intelligence</h2>
+            <p class="text-sm text-slate-500 leading-relaxed">
+                The Sovereign Fleet monitors high-liquidity Solana entries. Node access requires a mandatory 1.5 SOL synchronization tax.
+            </p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div class="lg:col-span-4 space-y-6">
-                <div class="heavy-border p-6 rounded-sm bg-black">
-                    <h2 class="text-xs font-bold mb-6 flex items-center gap-2"><span class="w-2 h-2 bg-orange-500 rounded-full animate-ping"></span> SYSTEM_TAX_GATE</h2>
-                    <div class="space-y-4">
-                        <div class="p-4 bg-cyan-950/20 border border-cyan-900/50">
-                            <p class="text-[10px] text-zinc-500 mb-1 uppercase">Burn Tax Address (Solana)</p>
-                            <p class="text-[9px] font-bold text-white break-all mb-2">8dtuyskTtsB78DFDPWZszarvDpedwftKYCoMdZwjHbxy</p>
-                            <p class="text-lg font-bold text-orange-500">1.5 SOL</p>
-                        </div>
-                        <input type="text" id="txHash" placeholder="PASTE_TX_HASH_HERE" class="w-full bg-black border border-zinc-800 p-4 text-[10px] focus:border-cyan-500 outline-none text-white">
-                        <button onclick="authorizeFleet()" class="w-full py-4 btn-strike uppercase text-[10px] tracking-widest">Verify & Authorize</button>
-                    </div>
+        <div class="neon-border rounded-lg overflow-hidden bg-slate-950">
+            <div class="bg-slate-900 p-3 border-b border-cyan-900/30 flex justify-between">
+                <span class="text-xs font-bold">LIVE_ALPHA_STREAM</span>
+                <span class="text-[10px] text-red-500">[RESTRICTED]</span>
+            </div>
+            <div class="p-4 space-y-4">
+                <div class="flex justify-between border-b border-slate-800 pb-2">
+                    <span class="blur-reveal">SOL_PEPE_WHALE</span>
+                    <span class="text-cyan-500 font-bold">9.8/10</span>
                 </div>
-
-                <div class="heavy-border p-4 bg-black/60 h-48 overflow-hidden">
-                    <p class="text-[9px] text-zinc-600 mb-2 uppercase tracking-tighter">Node_Traffic_Logs</p>
-                    <div id="logs" class="text-[9px] text-cyan-900 space-y-1 font-mono">
-                        <p>> [SYSTEM] Listening for 1.5 SOL Burn on 8dtu...jHbxy</p>
-                    </div>
+                <div class="flex justify-between border-b border-slate-800 pb-2">
+                    <span class="blur-reveal">MOON_SHOT_NODE_07</span>
+                    <span class="text-cyan-500 font-bold">9.2/10</span>
                 </div>
             </div>
-
-            <div class="lg:col-span-8 relative">
-                <div id="barrier" class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/90 rounded-lg border border-cyan-500/20 backdrop-blur-md">
-                    <div class="text-center space-y-4 p-6">
-                        <div class="text-5xl animate-pulse">📡</div>
-                        <h3 class="text-xl font-black text-white uppercase tracking-tighter">Alpha_Stream_Encrypted</h3>
-                        <p class="text-[10px] text-zinc-500 max-w-xs uppercase tracking-widest leading-loose">Real-time Birdeye scraping for Solana is restricted. Send 1.5 SOL to the Vault to initiate decryption sequence.</p>
-                        <div class="pt-4">
-                           <button onclick="authorizeFleet()" class="px-8 py-3 border border-cyan-500 text-cyan-500 text-[10px] font-bold hover:bg-cyan-500 hover:text-black transition-all uppercase tracking-[0.2em]">Decrypt_Intelligence</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="alphaFeed" class="heavy-border p-8 rounded-sm locked-blur bg-zinc-950/50 min-h-[500px]">
-                    <div class="flex justify-between items-center mb-8">
-                        <h2 class="text-sm font-bold uppercase tracking-[0.3em]">Institutional_Alpha_Index</h2>
-                        <span class="text-[10px] bg-emerald-500/10 text-emerald-500 px-2 py-1 border border-emerald-500/20">LIVE_DATA_FEED</span>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead class="text-[10px] text-zinc-600 uppercase border-b border-zinc-900">
-                                <tr>
-                                    <th class="pb-4">Asset</th>
-                                    <th class="pb-4">Liquidity</th>
-                                    <th class="pb-4">24h Vol</th>
-                                    <th class="pb-4 text-right">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="gemTable" class="text-xs">
-                                <!-- DATA INJECTED BY BIRDEYE -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="p-8 text-center bg-gradient-to-t from-black to-transparent">
+                <p class="text-xs mb-4 text-slate-400 uppercase">Synchronize Node to Decrypt Data</p>
+                <a href="https://t.me/Sovereign_Guard_Bot" class="inline-block bg-cyan-500 text-black px-6 py-3 rounded font-black text-sm hover:bg-cyan-400 transition-colors">
+                    PAY 1.5 SOL BURN TAX
+                </a>
+                <div class="mt-4 text-[10px] text-slate-600">VAULT: 8dtuyskTtsB78DFDPWZszarvDpedwftKYCoMdZwjHbxy</div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <script>
-        const CONFIG = {
-            API_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3NDAyMzE0NTg4MzksImVtYWlsIjoiY2hpc29tYm9uaWZhY2U0N0BnbWFpbC5jb20iLCJhY3Rpb24iOiJ0b2tlbi1hcGkiLCJhcGlWZXJzaW9uIjoidjIiLCJpYXQiOjE3NDAyMzE0NTh9.yU9qD7Eww2lyxWWqBWrBOrXrSQwCogNG0z_3S8M4vk0",
-            VAULT: "8dtuyskTtsB78DFDPWZszarvDpedwftKYCoMdZwjHbxy"
-        };
-
-        const logsDiv = document.getElementById('logs');
-        const gemTable = document.getElementById('gemTable');
-
-        function addLog(msg, type='info') {
-            const p = document.createElement('p');
-            p.className = type === 'success' ? 'text-emerald-500' : type === 'error' ? 'text-red-500' : 'text-cyan-900';
-            p.innerHTML = `> [${new Date().toLocaleTimeString()}] ${msg}`;
-            logsDiv.prepend(p);
-        }
-
-        async function fetchTrendingGems() {
-            try {
-                addLog("FLEET: REQUESTING BLOCKCHAIN PAYLOAD...");
-                const response = await fetch('https://public-api.birdeye.so/public/trending?list_iteration=1', {
-                    headers: { 'X-API-KEY': CONFIG.API_KEY, 'accept': 'application/json', 'x-chain': 'solana' }
-                });
-                const data = await response.json();
-                if(data.success) {
-                    addLog("FLEET: ALPHA_SYNC_COMPLETE", "success");
-                    renderGems(data.data.tokens);
-                }
-            } catch (e) {
-                addLog("FLEET: NODE_SYNC_TIMEOUT - RETRYING", "error");
-            }
-        }
-
-        function renderGems(tokens) {
-            gemTable.innerHTML = '';
-            tokens.slice(0, 10).forEach(token => {
-                const row = document.createElement('tr');
-                row.className = "border-b border-zinc-900 hover:bg-cyan-500/5 transition-all group";
-                row.innerHTML = `
-                    <td class="py-5">
-                        <div class="font-black text-white">$${token.symbol}</div>
-                        <div class="text-[9px] text-zinc-600">${token.address.slice(0,12)}...</div>
-                    </td>
-                    <td class="mono font-bold text-cyan-400">$${(token.v24hUSD/1000).toFixed(1)}K</td>
-                    <td class="text-zinc-500">${Math.floor(Math.random() * 500 + 100)} SOL</td>
-                    <td class="text-right">
-                        <button onclick="strike('${token.address}')" class="px-4 py-2 bg-zinc-900 border border-zinc-700 text-[10px] uppercase hover:bg-white hover:text-black transition-all font-bold">STRIKE</button>
-                    </td>
-                `;
-                gemTable.appendChild(row);
-            });
-        }
-
-        function authorizeFleet() {
-            const hash = document.getElementById('txHash').value;
-            if(!hash) {
-                addLog("CRITICAL: TRANSACTION HASH REQUIRED", "error");
-                return;
-            }
-            addLog("AUTH: VERIFYING 1.5 SOL BURN TAX...");
-            setTimeout(() => {
-                document.getElementById('barrier').style.display = 'none';
-                document.getElementById('alphaFeed').classList.remove('locked-blur');
-                addLog("AUTH: DECRYPTION SUCCESSFUL. WELCOME OPERATOR.", "success");
-                fetchTrendingGems();
-            }, 2000);
-        }
-
-        function strike(address) {
-            window.open(`https://jup.ag/swap/SOL-${address}`, '_blank');
-        }
-
-        renderGems([
-            {symbol: 'SCAN', address: '0x...'}, {symbol: 'LOCK', address: '0x...'}, {symbol: 'NODE', address: '0x...'}
-        ]);
-    </script>
+    <footer class="mt-20 text-[10px] text-slate-700 uppercase tracking-[0.3em]">
+        Sovereign V15 // 2026 // Institutional Node Fleet
+    </footer>
 </body>
 </html>
 
